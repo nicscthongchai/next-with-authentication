@@ -10,7 +10,15 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<User>
 ) {
-  const { method } = req;
+  const { method, headers } = req;
+  const { authorization = "" } = headers;
+  const [scheme, payload] = authorization.split(" ");
+
+  if (scheme !== "Bearer" || payload !== "accessToken") {
+    res.status(401).end("Unauthorized");
+    return;
+  }
+
   switch (method) {
     case "GET":
       res.status(200).json({ username: "username", name: "John Doe" });

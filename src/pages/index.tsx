@@ -1,5 +1,8 @@
 import { MainLayout } from "~layouts/MainLayout";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
+import { User } from "./api/user/me";
+import { parseCookies } from "nookies";
+import { ACCESS_TOKEN_NAME } from "~constant/cookie";
 
 const IndexPage: NextPage = () => {
   return (
@@ -10,3 +13,26 @@ const IndexPage: NextPage = () => {
 };
 
 export default IndexPage;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  let user: User | null = null;
+  try {
+    const accessToken = parseCookies(ctx)[ACCESS_TOKEN_NAME];
+    const response = await fetch("http://localhost:3000/api/user/me", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    if (response.status === 200) {
+      user = await response.json();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  return {
+    props: {
+      user,
+    },
+  };
+};

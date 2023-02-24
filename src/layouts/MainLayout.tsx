@@ -6,6 +6,7 @@ import { Button } from "~components/Button";
 import { useMe } from "~hooks/useMe";
 import { destroyCookie } from "nookies";
 import { ACCESS_TOKEN_NAME } from "~constant/cookie";
+import { useUser } from "~providers/authentication";
 
 export type MainLayoutProps = {
   children?: ReactNode;
@@ -14,12 +15,11 @@ export type MainLayoutProps = {
 export const MainLayout: React.FC<MainLayoutProps> = (props) => {
   const { children } = props;
   const router = useRouter();
-  const { user, revalidate } = useMe();
+  const user = useUser();
 
   const handleClickLogout = () => {
     destroyCookie(null, ACCESS_TOKEN_NAME);
-    revalidate();
-    router.push("/");
+    window.location.href = "/";
   };
 
   return (

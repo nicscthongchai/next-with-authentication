@@ -18,8 +18,12 @@ export const useMe = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      const data = await response.json();
-      setUser(data);
+      if (response.status === 200) {
+        const data = await response.json();
+        setUser(data);
+      } else {
+        setUser(null);
+      }
     } catch (error) {
       console.error(error);
       setUser(null);

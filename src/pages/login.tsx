@@ -27,7 +27,7 @@ const LoginPage: NextPage = () => {
   return (
     <MainLayout>
       <div className="flex justify-center">
-        <Button onClick={handleClickLogin}>Login</Button>
+        <Button onClick={handleClickLogin}>Click to Login</Button>
       </div>
     </MainLayout>
   );

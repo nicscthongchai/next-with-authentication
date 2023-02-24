@@ -16,18 +16,21 @@ export default IndexPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let user: User | null = null;
-  try {
-    const accessToken = parseCookies(ctx)[ACCESS_TOKEN_NAME];
-    const response = await fetch("http://localhost:3000/api/user/me", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    if (response.status === 200) {
-      user = await response.json();
+  const accessToken = parseCookies(ctx)[ACCESS_TOKEN_NAME];
+
+  if (accessToken) {
+    try {
+      const response = await fetch("http://localhost:3000/api/user/me", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.status === 200) {
+        user = await response.json();
+      }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
   }
 
   return {
